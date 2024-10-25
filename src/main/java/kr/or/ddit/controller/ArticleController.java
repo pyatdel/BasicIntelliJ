@@ -6,7 +6,9 @@ import kr.or.ddit.repository.ArticleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -75,5 +77,40 @@ public class ArticleController {
         log.info("(후)createArticle->article(Entity는 DB) : "+article.toString());
         return "success";
 
+    }
+
+    /**
+     요청URI : /articles/1
+     /articles/2
+     /articles/3
+     경로변수(PathVariable) : 1
+     요청방식 : get
+     */
+    @GetMapping("/articles/{id}") // /의 뒤의 값이 value 값과 같아야 함
+
+    //                              경로 상의 변하는 수 : id
+    public String show(@PathVariable(value="id") Long id,
+                    Model model){ // 매개변수로 id 받아오기
+        // id를 잘 받아쓴지 확인하는 로그 찍기
+        // show-> id : 1
+        log.info("show->id : "+id);
+
+        // 1. id를 조회해 데이터 가져오기
+        // findById()는 JPA의 CrudRepository가 제공하는 메서드로, 특정 엔티티의 id 값을 기준으로
+        //  데이터를 찾아 Optional 타입으로 반환.
+        // orElse(null) : id 값으로 데이터를 찾을 때 해당 id 값이 없으면 null을 반환.
+        // 데이터를 조회한 결과, 값이 있으면 articleEntity 변수에 값을 넣고 없으면
+        //  null을 저장
+        Article articleEntity = articleRepository.findById(id).orElse(null);
+
+
+        // 2. 모델에 데이터 등록하기
+        // article이라는 이름으로 value인 articleEntity 객체 추가
+        model.addAttribute("article", articleEntity);
+
+        // 3. 뷰 페이지 반환하기
+        // 뷰 페이지는 articles라는 디렉터리 안에 show라는 파일이 있다는 의미
+        // forwarding : mustache
+        return "articles/show";
     }
 }
