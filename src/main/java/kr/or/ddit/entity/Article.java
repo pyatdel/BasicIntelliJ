@@ -38,6 +38,7 @@ import lombok.Data;
     // 2. content 필드 선언, DB 테이블의 content 열과 연결됨
         private String content;
 
+    public Article() {}
 
 
     public Article(Long id, String title, String content) {
@@ -56,6 +57,17 @@ import lombok.Data;
                 '}';
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
 }
 
 

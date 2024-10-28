@@ -1,0 +1,59 @@
+134
+#article  -- 시작
+<tr>
+	<th>{{id}}</th>
+	<th>{{name}}</th>
+ 
+</tr>
+/article -- 종료
+
+
+
+크롬 --(/articles , 목록 요청)--> 메소드 처리 --(fineAll()--> DB 
+
+DB --(list<엔티티>)--> 매핑 --(return)--> (크롬)  
+
+articleRerpository : JPA에서 제공해주는 리파지터리. 리파지터리와 함께 다니는 애는
+                         엔티티(Article), DB
+
+
+
+ArrayList -> list(고양이) -> collection(동물) -> iterable(생물)
+
+캐스팅(casting)이란 형변환이라고도 하며 데이터 타입을 변환하는 것을 말함.  
+자바에서 상속 관계가 있는 특정 객체는 상황에 따라 더 넓은 범위로 해석될 수도, 때때로 좁은 범위로 해석될 수도 있음. 
+이때 넓은 범위로 해석하는 것을 업캐스팅(upcasting), 좁은 범위로 해석하는 것을 다운캐스팅(downcasting)이라고 함. 
+예를 들어 “고양이”를 “생물”로 해석했다면 업캐스팅한 것이고, “생물”에서 다시 “동물”로 해석했다면 다운캐스팅한 것임.
+
+137pg. 
+
+index >> /articles
+
+new >> /articles
+
+show >> /articles
+
+서버 >> <a>(href), <form>(ahir)
+
+
+리다이렉트
+크롬 --요청--> 톰켓
+
+톰켓 --재요청 지시--> 크롬
+
+크롬 --재요청--> 톰켓
+
+톰켓 --응답--> 크롬
+
+
+형식 : return "redirect:URL_주소";
+>> 재요청을 하는 이유?
+
+상세 페이지에서 수정 페이지 요청 --> 엔티티로 db 작업
+db --> 리파지토리로 가져와서 수정된 데이터 반영
+
+post c
+get r
+patch(put) u
+delete d
+

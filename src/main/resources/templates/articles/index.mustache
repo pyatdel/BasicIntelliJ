@@ -75,22 +75,44 @@
                 요청 URI : /articles/create
                 요청 파라미터 : request{title=제목, content=내용}
                 요청 방식 : post
+
+                model.addAttribute("article",articleEntity);
+
+                Article{id=3, title='3', content='3'
+
                 -->
-                <form class="container" action="/articles/create" method="post">
-                    <div class="mb-3">
-                        <label class="form-label">제목</label>
-                        <!-- required : 필수(mandatory) -->
-                        <input type="text" class="form-control" name="title"
-                            required/>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">내용</label>
-                        <textarea class="form-control" rows="3" name="content"
-                            required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="/articles" class="btn btn-secondary">목록</a>
-                </form>
+
+                <!-- [는 List를 말함, {는 엔티티(Article)/1행
+                [
+                Article{id=1, title='1', content='11'},
+                Article{id=2, title='2', content='22'},
+                Article{id=3, title='3', content='33'}
+                ]
+                -->
+
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <td>글아이디</td>
+                        <td>글제목</td>
+                        <td>내용</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#articleList}}
+                        <tr>
+                            <td>{{id}}</td>
+                            <!-- 제목 클릭 시 상세 페이지로 이동 -->
+                            <td><a href="/articles/{{id}}">{{title}}</td>
+                            <td>{{content}}</td>
+                        </tr>
+                    {{/articleList}}
+                    </tbody>
+                </table>
+
+                <a href="/articles/new" class="btn btn-primary">등록폼</a>
+
                 <!-- /// body 끝 /// -->
             </div><!-- /.container-fluid -->
         </section>

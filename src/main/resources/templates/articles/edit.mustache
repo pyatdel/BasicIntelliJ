@@ -67,7 +67,7 @@
 
         <!-- Main content -->
         <section class="content">
-            <div class="container-fluid">
+            <a class="container-fluid">
                 <!-- /// body 시작 /// -->
                 <!-- 폼 페이지
                 어디에 보낼지 : action 속성
@@ -75,22 +75,35 @@
                 요청 URI : /articles/create
                 요청 파라미터 : request{title=제목, content=내용}
                 요청 방식 : post
+
+                model.addAttribute("article",articleEntity);
+
+                Article{id=3, title='3', content='33'
+                <p>{{article}}</p>
                 -->
+
+
+                {{#article}}
                 <form class="container" action="/articles/create" method="post">
                     <div class="mb-3">
                         <label class="form-label">제목</label>
+                        <input type="text" class="form-control" name="id"
+                               value="{{id}}" \>
                         <!-- required : 필수(mandatory) -->
                         <input type="text" class="form-control" name="title"
-                            required/>
+                          value="{{title}}"  required/>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">내용</label>
                         <textarea class="form-control" rows="3" name="content"
-                            required></textarea>
+                             required>{{content}}</textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="/articles" class="btn btn-secondary">목록</a>
                 </form>
+                 {{/article}}
+                <!-- /articles/1 : 상세페이지 보기 URL -->
+                <a href="/articles/1/edit" class="btn btn-warning">수정</a>
+                <a href="/articles" class="btn btn-primary">목록</a>
                 <!-- /// body 끝 /// -->
             </div><!-- /.container-fluid -->
         </section>
