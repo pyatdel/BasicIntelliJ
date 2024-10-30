@@ -84,7 +84,19 @@
 
 
                 {{#article}}
-                <form class="container" action="/articles/create" method="post">
+                    <!--
+                    action : 요청 URL. 서버로 폼 데이터를 보낸다는 의미
+                    method : 속성 값으로 get과 post, 2가지를 설정할 수 있음
+                        - 조회 : GET(DB변경이 없음)
+                        - 생성 : POST
+                        - 수정 : PUT(PATCH)
+                        - 삭제 : DELETE
+
+                    요청 URI : /article/update
+                    요청 파라미터 : request{id=1, title=개똥이의모험11, content=내용11}
+                    요청 방식 : post
+                    -->
+                <form class="container" action="/articles/update" method="post">
                     <div class="mb-3">
                         <label class="form-label">제목</label>
                         <input type="text" class="form-control" name="id"

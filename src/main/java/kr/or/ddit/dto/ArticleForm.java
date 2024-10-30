@@ -8,6 +8,9 @@ import lombok.Data;
 
 @Data
 public class ArticleForm {
+    // id 프로퍼티(필드) 추가
+    private Long id;
+
     //제목을 받을 필드
     private String title;
     //내용을 받을 필드
@@ -53,6 +56,8 @@ public class ArticleForm {
     두 번째 전달값은 title, 세 번째 전달값은 content를 입력.
      */
     public Article toEntity() {
-        return new Article(null, this.title, this.content);
+        // DTO -> ArticleForm -> form(id=1, title=개똥이의 여행1, content=즐거운 여행1)
+        // form.toEntity();
+        return new Article(this.id, this.title, this.content);
     }
 }

@@ -69,6 +69,19 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- /// body 시작 /// -->
+                <!--
+                rttr.addFlashAttribute("msg", "삭제했습니다");
+                -->
+                <!-- msg 사용 범위 설정 시작 -->
+                {{#msg}}
+                    <div class="alert alert-primary alert-dismissible"><!-- 메시지 창 작성 -->
+                        {{msg}}
+                        <button type="button" class="btn btn-block btn-warning"
+                                data-dismiss="alert" aria-label="Close">Close</button>
+                    </div>
+                {{/msg}}
+                <!-- msg 사용 범위 설정 시작 -->
+
                 <!-- 폼 페이지
                 어디에 보낼지 : action 속성
                 어떻게 보낼지 : method 속성

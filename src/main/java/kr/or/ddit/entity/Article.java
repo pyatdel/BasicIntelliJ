@@ -1,9 +1,6 @@
 package kr.or.ddit.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 
@@ -18,15 +15,17 @@ import lombok.Data;
     public class Article {
     //Id가 빨간색으로 표시되면 마우스를 올린 후 Alt + Enter를 누르고
     //  Id(jakarta.persistence)를 선택
-        /*
-        대푯값을 id로 선언. 대푯값은 사람으로 따지면 주민등록번호와 같음.
-        Article 엔티티 중에 제목과 내용이 같은 것이 있더라도 대푯값 id로 다른 글임을 구분할 수 있음
-         */
+
     // 3. Id : 엔티티의 대푯값 지정
     // 3. GeneratedValue : 자동 생성 기능 추가(숫자가 자동으로 매겨짐)
+
+    /* strategy = GenerationType.IDENTITY
+    이렇게 id 자동 생성 전략을 추가하면 앞으로 데이터를 생성할 때마다
+    DB가 알아서 id에 1,2,3.. 값을 넣어줌.
+    */
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id; // id 완전 자동화
 
     /*
     DTO 코드를 작성할 때와 같이 title, content 필드 선언
@@ -67,6 +66,16 @@ import lombok.Data;
 
     public String getContent() {
         return content;
+    }
+
+    // 사용자가 title 또는 content를 생략 시 DB에 반영이 안되도록 하기 위함
+    public void patch(Article article) {
+        if(article.title != null){
+            this.title = article.title;
+        }
+        if(article.content != null){
+            this.content = article.content;
+        }
     }
 }
 

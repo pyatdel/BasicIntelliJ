@@ -1,25 +1,109 @@
-포워딩 = mustache
+Spring MVC와 데이터 처리
+1. 스프링의 핵심 개념 ("스프링 삼각형")
+1.1 PSA (Portable Service Abstraction)
 
-뷰가 바뀌었을 떄는 망치를 이용해서 빌드하면 빠르다
+환경과 세부 기술에 상관없이 일관된 방식으로 서비스 제공
+예: JDBC, JPA, Hibernate 등을 추상화
 
+1.2 POJO (Plain Old Java Object)
 
+순수한 자바 객체 사용
+특별한 규약에 종속되지 않는 객체
 
-폼 데이터(form data)란 HTML 요소인 <form> 태그에 실려 전송되는 데이터를 말함. 
-인터넷 게시판에 글을 쓸 때 내용을 입력하고 [전송] 버튼을 누르면 게시글이 올라감. 
-<form> 태그는 이렇게 웹 브라우저에서 서버로 데이터를 전송 시 사용함.
-<form> 태그는 택배에 비유할 수 있음. 택배를 보낼 시 
-송장에 수령자와 배송 형태(익일 배송, 새벽 배송 등)를 적음. 
-<form> 태그도 데이터를 전송 시 어디로(where), 어떻게(how) 보낼지 등을 적어서 보냄.
-<form> 태그에 실어 보낸 데이터는 서버의 컨트롤러가 객체에 담아 받음. 
-이 객체를 DTO(Data Transfer Object)라고 함. 
-DTO로 받은 데이터는 최종적으로 데이터베이스(DB, Database)에 저장됨.
+javaCopy// POJO 예시
+public class User {
+    private String name;
+    private String email;
 
+    // 기본 생성자
+    public User() {}
 
-DB는 자바 언어를 이해하지 못함. 스프링 부트는 자바 언어를 사용하지만 
-DB는 SQL(Structed Query Language)라는 언어를 사용함.
-DB에 자바로 명령을 내리려면 바로 JPA를 사용하면 됨. 
-JPA(Java Persistence API)란 자바 언어로 DB에 명령을 내리는 도구로, 
-데이터를 객체 지향적으로 관리할 수 있게 해 줌. JPA도 프로젝트 생성 시 추가해줬음.
+    // getter/setter
+    public String getName() {
+        return name;
+    }
+}
+1.3 IOC/DI (Inversion of Control/Dependency Injection)
+
+객체 생성과 의존관계 관리를 Spring이 담당
+
+javaCopy@Controller
+public class UserController {
+    // Spring이 자동으로 주입
+    @Autowired
+    private UserService userService;
+}
+1.4 AOP (Aspect Oriented Programming)
+
+개발자는 비즈니스 로직에만 집중
+공통 관심사는 분리하여 관리
+
+javaCopy@Aspect
+@Component
+public class LoggingAspect {
+    @Before("execution(* com.example.service.*.*(..))")
+    public void logBefore() {
+        // 메서드 실행 전 로깅
+    }
+}
+2. 폼 데이터 처리 흐름
+2.1 HTML Form
+htmlCopy<form action="/articles/create" method="post">
+    <input type="text" name="title">
+    <textarea name="content"></textarea>
+    <button type="submit">제출</button>
+</form>
+2.2 DTO (Data Transfer Object)
+javaCopypublic class ArticleForm {
+    private String title;
+    private String content;
+
+    // 생성자, getter/setter
+}
+2.3 Entity
+javaCopy@Entity
+public class Article {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String title;
+    private String content;
+}
+2.4 데이터 흐름도
+CopyForm Data → DTO → Entity → Repository → Database
+    ↓         ↓      ↓          ↓          ↓
+HTML Form → ArticleForm → Article → JPA → SQL
+3. JPA (Java Persistence API)
+3.1 특징
+
+자바 객체와 데이터베이스 테이블 매핑
+SQL 자동 생성
+
+javaCopy@Repository
+public interface ArticleRepository
+    extends JpaRepository<Article, Long> {
+    // 기본 CRUD 메서드 자동 제공
+}
+4. 개발 팁
+4.1 코드 변경 시 대응
+CopyJava 코드 변경 → 서버 재시작 필요
+Mustache 변경 → 빌드(망치 아이콘)만 필요
+4.2 View 처리 (Mustache)
+
+서버 사이드 템플릿 엔진
+포워딩 방식으로 처리
+
+javaCopy@Controller
+public class ArticleController {
+    @GetMapping("/articles")
+    public String index(Model model) {
+        // 데이터를 모델에 추가
+        model.addAttribute("articles", articleList);
+        // 뷰 이름 반환
+        return "articles/index";
+    }
+}
 
 [스프링 삼각형]
     psa  pojo   ioc/di    aop
@@ -30,15 +114,6 @@ JPA(Java Persistence API)란 자바 언어로 DB에 명령을 내리는 도구�
  ioc/di :기존에는 new를 개발자가.. 이젠 new를 spring에서 / 의존성 주입
  aop    :개발자는 개발만!
 
-
-1) 폼 데이터를 받는 객체 DTO. DTO의 클래스 타입은 ArticleForm
-2) DTO가 엔티티로 변환됨. 엔티티의 클래스 타입은 Article
-3) 리파지터리가 엔티티를 DB에 저장해 saved라는 엔티티 변수에 반환.
-saved 변수에 저장된 결과를 보면 title과 content는 똑같고 id는 자동으로 설정된 1을 출력함.
-saved 변수는 엔티티 타입이고, 엔티티의 클래스 타입은 Article
-
-
-
-!!자바(*.java) 코드가 바뀔 때는 서버를 재시작해야 하지만, 
-머스테치(*.mustache) 코드가 바뀔 때는 망치 아이콘만 눌러 빌드해도 됨.
-
+ 스프링은 POJO를 기반으로 PSA를 통해 일관된 서비스를 제공하며,
+ IOC/DI로 객체 관리를 자동화하고, AOP로 핵심 로직과 부가 기능을 분리하여
+ 개발의 효율성을 극대화합니다.

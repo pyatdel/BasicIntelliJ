@@ -100,6 +100,12 @@
                 {{/article}}
                 <!-- /articles/1 : 상세페이지 보기 URL -->
                 <a href="/articles/{{id}}/edit" class="btn btn-warning">수정</a>
+                <a href="/articles/{{id}}/delete" class="btn btn-danger">삭제</a>
+                <!--
+                요청 URI : /articles/3/delete
+                경로 변수 : 3
+                요청 방식 : get  (A 링크는 get 방식으로..)
+                -->
                 <a href="/articles" class="btn btn-primary">목록</a>
                 <!-- /// body 끝 /// -->
             </div><!-- /.container-fluid -->

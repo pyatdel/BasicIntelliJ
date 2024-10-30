@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 
@@ -63,7 +64,7 @@ public class ArticleController {
 
     //@ResponseBody
     @PostMapping("/articles/create") // 요청 URL
-    public String CreateArticle(ArticleForm form){
+    public String createArticle(ArticleForm form){
         // 폼에서 전송한 데이터를 매개변수로 받아옴. DTO로 만든 클래스 이름이 ArticleForm이므로
         // ArticleForm 타입의 form 객체를 매개변수로 선언
         // 폼에서 전송한 데이터가 DTO에 잘 담겼는지 확인하기 위해 출력문을 추가
@@ -75,6 +76,7 @@ public class ArticleController {
         Article article = form.toEntity();
         // createArticle->article(Entity는 DB) : Article{id=null, title='제목', content='내용'}
         log.info("(전)createArticle->article(Entity는 DB) : "+article.toString());
+        // Article a = this.articleRepository.findById(2).orElse(null);
         // 2. 리파지터리로 엔티티를 DB에 저장
         Article saved = this.articleRepository.save(article);
         // createArticle->article(Entity는 DB) : Article{id=null, title='제목', content='내용'}
@@ -179,4 +181,72 @@ public class ArticleController {
         // templates/ + articles/edit.mustache
         return "articles/edit";
     }
-}
+
+    /** 수정은 원래 PUT
+    요청URI : /articles/update
+    요청파라미터 : request{id=1,title=개똥이의 여행11,content=즐거운 여행11}
+    요청방식 : post
+
+     HTTP -> DTO(ArticleForm), VO
+     JPA -> 엔티티(Article), 레퍼지터리, DB
+     */
+    // @PutMapping 이것도 원래 작성해야 한다
+    // @ResponseBody // 이걸 작성하면 return 데이터가 JSON으로 응답된다(경로로 받을 때는 사용 (x))
+    @PostMapping("/articles/update")
+    public String update(ArticleForm form){
+        // ArticleForm(id=1, title=개똥이의 여행1, content=즐거운 여행1)
+        log.info("update->form : " + form);
+
+        // 1. DTO(ArticleForm)를 엔티티(Article)로 변환
+        // DTO(form)를 엔티티(articleEntity)로 변환
+        Article articleEntity = form.toEntity();
+        // ArticleForm(id=1, title=개똥이의 여행1, content=즐거운 여행1)
+        log.info("update->articleEntity : " + articleEntity); // 찍어보기
+
+        // 2. 엔티티를 DB에 저장
+        // 2-1. DB에서 기존 데이터 가져오기(리파지터리의 도움받기)
+        Article target = this.articleRepository.findById(articleEntity.getId()).orElse(null); // 데이터가 없을 경우, null 처리
+
+        // Article{id=1, title=즐거운 여행, content=개똥이의 여행}
+        log.info("update->target : " + target);
+        // 2-2. 기존 데이터 값을 갱신하기
+        if(target != null){
+            this.articleRepository.save(articleEntity); // 엔티티를 DB에 저장
+        }
+
+        // 3. 수정 결과 페이지로 리다이렉트(/articles/1)
+
+        return "redirect:/articles/"+articleEntity.getId();
+    }
+
+    /**
+     * 요청 URI : /articles/3/delete
+     * 경로 변수 : 3
+     * 요청 방식 : get
+     */
+
+    // 골뱅이ResponseBody
+    @GetMapping("/articles/{id}/delete")
+    public String delete(@PathVariable(value="id") Long id,
+                         RedirectAttributes rttr){
+
+        log.info("delete->id : "+id);
+
+        // 1) 삭제할 대상 가져오기((3번(엔티티)->this.리파지터리->DB)
+        Article target = this.articleRepository.findById(id).orElse(null);
+        log.info("delete->target : " + target);
+
+        // 2) 대상 엔티티 삭제하기(this.리파지터리->DB)
+        // 삭제할 대상이 있는 지 확인
+        if(target != null){
+            // delete() 메소드로 대상 삭제
+            this.articleRepository.delete(target);
+            // 1회성(리다이렉트 시점에 한 번만 사용 가능한 메시지, 한 번 쓰고 사라지는 휘발성 메시지
+            // 리다이렉트 페이지에서 사용할 데이터를 남길 수 있음
+            rttr.addFlashAttribute("msg", "삭제했습니다.");
+        }
+        // 3) 결과 페이지로 리다이렉트하기(목록으로 이동)
+            return "redirect:/articles";
+
+    }
+} // end class
