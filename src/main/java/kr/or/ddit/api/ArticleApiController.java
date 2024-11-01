@@ -3,6 +3,7 @@ package kr.or.ddit.api;
 import kr.or.ddit.dto.ArticleForm;
 import kr.or.ddit.entity.Article;
 import kr.or.ddit.repository.ArticleRepository;
+import kr.or.ddit.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,7 @@ public class ArticleApiController {
         // .findAll() 메서드 : DB에 저장된 모든 Article을 가져와 반환
         // return this.articleRepository.findAll();
         return this.articleService.index();
+
     }
 
     // 요청 URI : /api/articles/1
@@ -49,7 +51,10 @@ public class ArticleApiController {
         // URL의 id를 매개변수로 받아 오기. DB에서 id로 검색하려면 show() 메서드의 매개변수로
         // id를 받아 와야 함. 이때 id는 요청URL에서 가지고 오므로 매개변수 앞에
         // PathVariable 애너테이션을 붙임
-        return this.articleRepository.findById(id).orElse(null);
+        // return this.articleRepository.findById(id).orElse(null);
+        Article article = this.articleService.show(id);
+
+        return article;
     }
 
     /*
@@ -67,12 +72,18 @@ public class ArticleApiController {
     // POST(Insert)
     //반환형이 Article인 create()라는 메서드를 정의하고, 수정할 데이터를 dto 매개변수로 받아옴.
     @PostMapping("/api/articles")
-    public Article create(@RequestBody ArticleForm articleForm){
+    public ResponseEntity<Article> create(@RequestBody ArticleForm articleForm){
         // 이렇게 받아온 dto는 DB에서 활용할 수 있도록 엔티티로 변환해 article 변수에 넣고,
         // articleRepository를 통해 DB에 저장한 후 반환함
         //  엔티티                 DTO
         Article article = articleForm.toEntity();
-        return this.articleRepository.save(article);
+        // return this.articleRepository.save(article);
+        article = this.articleService.create(article);
+
+        // 등록 성공 시 OK, 등록 실패 시 BAD_REQUEST도 데이터와 함께 응답
+        return (article != null)?
+                ResponseEntity.status(HttpStatus.OK).body(article):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     // PATCH(PUT)
@@ -93,6 +104,7 @@ public class ArticleApiController {
     public ResponseEntity<Article> update(@PathVariable(value="id") Long id,
                           @RequestBody ArticleForm dto){
 
+        /*
         // 1. DTO -> 엔티티 변환하기(수정용 엔티티 생성)
         // 클라이언트에서 받은 수정 데이터가 담긴 dto를 DB에서 활용할 수 있도록
         // 엔티티로 변환해 article 변수에 저장
@@ -125,12 +137,13 @@ public class ArticleApiController {
         //4. 업데이트 및 정상 응답(200)하기
         // DB          변경될 값들
         target.patch(article);
+        */
 
 
-
-        //(대상 엔티티가 있으면 수정 내용으로 업데이트하고 정상 응답(200) 보내기
-        //article 엔티티에 담긴 수정용 데이터를 DB에 저장 후 updated라는 이름의 변수에 저장
-        Article updated = this.articleRepository.save(target);
+        // (대상 엔티티가 있으면 수정 내용으로 업데이트하고 정상 응답(200) 보내기
+        // article 엔티티에 담긴 수정용 데이터를 DB에 저장 후 updated라는 이름의 변수에 저장
+        // Article updated = this.articleRepository.save(target);
+        Article updated = this.articleService.update(dto);
         log.info("updated : ", updated);
 
         // 정상 응답
@@ -140,14 +153,15 @@ public class ArticleApiController {
     }
 
     // DELETE
-    //반환형으로 ResponseEntity에 <Article>을 실어 보내는 delete()라는 메서드를 정의하고
-    //  URL의 id를 매개변수로 받아 오자.
+    // 반환형으로 ResponseEntity에 <Article>을 실어 보내는 delete()라는 메서드를 정의하고
+    // URL의 id를 매개변수로 받아 오자.
     /*
     요청 URI : /api/articles/1
     요청 파라미터 :
     요청 방식 : delete
      */
 
+    /*
     @DeleteMapping("/api/articles/{id}")
     public ResponseEntity<Article> delete(@PathVariable(value="id")long id){
         log.info("delete->id : {}", id);
@@ -170,6 +184,21 @@ public class ArticleApiController {
         // 잘못된 요청이 아니라면 찾은 대상 엔티티를 삭제함. ResponseEntity의 상태(status)에는
         // HttpStatus.OK, 본문(body)에는 null을 실어 보냄
         this.articleRepository.delete(target);
+
+        // return ResponseEntity.status(HttpStatus.OK).body(null);
+        // return 문에 body(null) 대신 build()를 작성해도 됨. ResponseEntity의 build() 메서드는
+        // HTTP 응답의 body가 없는 ResponseEntity 객체를 생성함. 따라서 build() 메서드로 생성된
+        // 객체는 body(null)의 결과와 같음.
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+      바꿔보기 */
+
+    @DeleteMapping("/api/articles/{id}")
+    public ResponseEntity<Article> delete(@PathVariable(value="id")long id){
+        log.info("delete->id : {}", id);
+
+        // article = target
+        Article deleted = this.articleService.delete(id);
 
         // return ResponseEntity.status(HttpStatus.OK).body(null);
         // return 문에 body(null) 대신 build()를 작성해도 됨. ResponseEntity의 build() 메서드는

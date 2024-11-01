@@ -19,6 +19,13 @@ public class ArticleForm {
     //기본생성자
     public ArticleForm() {}
 
+    // 생성자
+    public ArticleForm(Long id, String title, String content) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+    }
+
     /*
     //getter/setter 메서드
     public String getTitle() {

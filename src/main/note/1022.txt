@@ -1,0 +1,84 @@
+forEach 태그? 배열(String[], int[][]), 
+         	콜!      리셋!
+         Collection(List, Set) 또는
+         맵다 하..	     하..	       쏘~	맵다
+         Map(HashTable, HashMap, SortedMap)
+
+1. forEach 태그와 데이터 구조
+
+배열 타입: String[], int[][]
+Collection 계열
+
+List, Set
+
+
+Map 계열
+
+HashTable
+HashMap
+SortedMap
+
+
+
+2. 데이터 객체의 이해
+
+DTO (Data Transfer Object)
+
+Data, Transfer, Object의 약자
+데이터 전달이 목적
+데이터 변경 불가
+getter 메서드만 사용
+
+
+VO (Value Object)
+
+value, Object의 약자
+값 자체를 표현
+데이터 변경 가능
+getter, setter 모두 사용
+최근 DTO보다 많이 사용되는 추세
+
+
+공통 특징
+
+프로퍼티(멤버변수) 포함
+기본 생성자 필요
+
+
+
+3. 자바빈 규약
+
+패키지 정의 필요
+기본 생성자 필수
+getter/setter 메서드 구현
+
+4. 프로젝트 구조
+Copy- view
+- controller
+- service
+- serviceImpl
+- vo
+5. 시멘틱 웹
+
+목적: 태그에 의미를 부여하여 웹사이트 구조를 쉽게 파악
+웹 구조의 이해도를 높이는 방식
+
+6. 문자열 관련 Function 태그
+
+length(): 문자열 길이 반환
+substring(): 특정 위치의 문자열 추출
+replace(): 문자열 교체 기능
+trim(): 앞뒤 공백 제거
+
+7. Spring Boot 시작하기
+
+개발 도구: IntelliJ IDEA 설치
+
+다운로드 링크: jetbrains.com/idea/download
+
+
+필수 의존성:
+
+mustache
+spring web
+spring data jpa
