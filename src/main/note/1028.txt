@@ -1,7 +1,7 @@
 Spring MVC 심화 개념
 1. Mustache 템플릿 문법
 1.1 기본 문법
-htmlCopy<!-- 단일 객체 표시 -->
+<!-- 단일 객체 표시 -->
 <tr>
     <th>{{id}}</th>
     <th>{{name}}</th>
@@ -30,7 +30,7 @@ View 매핑
     ↓
 Browser 응답
 2.2 Repository와 Entity 관계
-javaCopy@Repository
+@Repository
 public interface ArticleRepository
     extends JpaRepository<Article, Long> {
     // Article: 엔티티 타입
@@ -38,7 +38,7 @@ public interface ArticleRepository
 }
 3. 객체 계층 구조와 캐스팅
 3.1 계층 구조
-CopyIterable (생물)
+Iterable (생물)
     ↓
 Collection (동물)
     ↓
@@ -46,7 +46,7 @@ List (고양이)
     ↓
 ArrayList
 3.2 캐스팅 예시
-javaCopy// 업캐스팅 (좁은 범위 → 넓은 범위)
+// 업캐스팅 (좁은 범위 → 넓은 범위)
 List<String> list = new ArrayList<>();
 Collection<String> collection = list;
 Iterable<String> iterable = collection;
@@ -60,7 +60,7 @@ Copy/articles        → index (목록)
 /articles/new    → new (생성)
 /articles/{id}   → show (상세)
 4.2 페이지 이동 방식
-htmlCopy<!-- <a> 태그를 통한 이동 -->
+<!-- <a> 태그를 통한 이동 -->
 <a href="/articles/{{id}}">상세보기</a>
 
 <!-- form을 통한 이동 -->
@@ -77,14 +77,14 @@ Browser → Server (재요청)
     ↓
 Server → Browser (최종 응답)
 5.2 구현
-javaCopy@PostMapping("/articles/create")
+@PostMapping("/articles/create")
 public String create(ArticleForm form) {
     // 저장 로직
     return "redirect:/articles";  // 목록 페이지로 리다이렉트
 }
 6. HTTP 메서드와 CRUD
 6.1 매핑 관계
-javaCopy// Create: POST
+// Create: POST
 @PostMapping("/articles/create")
 public String create() { ... }
 
@@ -111,7 +111,7 @@ Copy상세 페이지
 수정된 데이터 반영
 7. 주요 코드 예시
 7.1 컨트롤러
-javaCopy@Controller
+@Controller
 public class ArticleController {
     @GetMapping("/articles/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
@@ -126,7 +126,7 @@ public class ArticleController {
     }
 }
 7.2 수정 폼
-htmlCopy<form action="/articles/update" method="post">
+<form action="/articles/update" method="post">
     <input type="hidden" name="_method" value="patch"/>
     <input type="text" name="title" value="{{article.title}}"/>
     <textarea name="content">{{article.content}}</textarea>

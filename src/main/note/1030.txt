@@ -1,7 +1,7 @@
 REST API와 시스템 아키텍처
 1. JSON (JavaScript Object Notation)
 1.1 기본 구조
-jsonCopy{
+{
     "key1": "value1",
     "key2": 42,
     "key3": {
@@ -25,7 +25,7 @@ jsonCopy{
 
 2. REST API
 2.1 개념 정의
-CopyREST = REpresentational State Transfer
+REST = REpresentational State Transfer
 - HTTP URL로 자원(Resource) 명시
 - HTTP Method로 CRUD 수행
 2.2 URL 설계 규칙
@@ -41,7 +41,7 @@ PATCH  /articles/1  # 1번 글 수정
 DELETE /articles/1  # 1번 글 삭제
 3. 컨트롤러 타입 비교
 3.1 REST 컨트롤러
-javaCopy@RestController  // 데이터(JSON) 반환
+@RestController  // 데이터(JSON) 반환
 public class ArticleApiController {
     @GetMapping("/api/articles")
     public List<Article> index() {
@@ -49,7 +49,7 @@ public class ArticleApiController {
     }
 }
 3.2 일반 컨트롤러
-javaCopy@Controller  // View 페이지 반환
+@Controller  // View 페이지 반환
 public class ArticleController {
     @GetMapping("/articles")
     public String index(Model model) {
@@ -59,7 +59,7 @@ public class ArticleController {
 }
 4. 시스템 계층 구조
 4.1 전체 아키텍처
-CopyClient → Server → Database
+Client → Server → Database
          ↓
     [서버 내부 계층]
     - Controller (요청/응답 처리)
@@ -68,7 +68,7 @@ CopyClient → Server → Database
 4.2 데이터 흐름
 CopyDatabase → Repository → Entity → DTO → Client
 4.3 계층별 역할
-javaCopy// 컨트롤러 계층
+// 컨트롤러 계층
 @RestController
 public class ArticleApiController {
     @Autowired
@@ -101,7 +101,7 @@ public interface ArticleRepository
 }
 5. 데이터 변환
 5.1 Entity와 DTO
-javaCopy// Entity (DB 테이블과 매핑)
+// Entity (DB 테이블과 매핑)
 @Entity
 public class Article {
     @Id
@@ -133,7 +133,7 @@ public class ArticleDto {
 }
 6. API 활용 예시
 6.1 공공데이터 포털 연동
-javaCopy@RestController
+@RestController
 public class PublicDataController {
     @GetMapping("/api/public-data")
     public ResponseEntity<String> getPublicData() {

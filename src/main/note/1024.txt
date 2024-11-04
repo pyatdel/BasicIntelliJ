@@ -94,7 +94,7 @@ Mustache 변경 → 빌드(망치 아이콘)만 필요
 서버 사이드 템플릿 엔진
 포워딩 방식으로 처리
 
-javaCopy@Controller
+Controller
 public class ArticleController {
     @GetMapping("/articles")
     public String index(Model model) {

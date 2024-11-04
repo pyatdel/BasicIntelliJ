@@ -53,7 +53,7 @@ getter, setter 모두 사용
 getter/setter 메서드 구현
 
 4. 프로젝트 구조
-Copy- view
+- view
 - controller
 - service
 - serviceImpl

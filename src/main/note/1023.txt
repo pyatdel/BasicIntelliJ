@@ -5,7 +5,7 @@ Spring Boot와 웹 개발 기초
 소스 코드를 실행 가능한 독립적 형태로 변환
 결과물: 독립적으로 실행 가능한 파일
 Gradle 설정:
-groovyCopy// build.gradle
+build.gradle
 idea {
     module {
         inheritOutputDirs = false
